@@ -17,7 +17,7 @@ If you have issues upon install, the error messages should help you out. Basical
 
 Alternatively, if you've got the fancy new PHP 5.4, you should be able to just run the script with the new internal HTTP server by doing this:
 
-  php -S localhost:8000 fennel.php
+        php -S localhost:8000 fennel.php
 
 (NB - I haven't tested this yet, but unless I hear otherwise, this should do it.)
 
@@ -54,5 +54,5 @@ In order to keep Fennel simple, there's no plan on adding plugins. If you want s
 
 TODO
 ====
-Finish the markup function
-Make the CSS pretty
+* Finish the markup function
+* Make the CSS pretty
