@@ -1,6 +1,6 @@
 Holy crap, what is this?!
 =========================
-Fennel was created to fill a rather specific niche - something with the simplicity of TiddlyWiki, a database backend (something really tidy), and in a language that most webhosts provide (or can even be run from a thumb drive).
+Fennel was created to fill a rather specific niche - something with the simplicity and portability of TiddlyWiki, a database backend (something really tidy), and in a language that most webhosts provide (or can even be run from a thumb drive).
 
 So with the magic of SQLite, PHP, and a freezing Calgary weekend, Fennel was created.
 
@@ -13,7 +13,7 @@ Installation
 ============
 Copy fennel.php to your web root directory. Then, access the file from your browser. That should be it. For realsies.
 
-If you have issues upon install, the error messages should help you out. Basicalliy, upon the first running of the script it will create the database and config file automatically. They'll be named after fennel.php (or whatever you rename the file to), so it shouldn't be too hard a search.
+If you have issues upon install, the error messages should help you out. Basically, upon the first running of the script it will create the database and config file automatically. They'll be named after fennel.php (or whatever you rename the file to), so it shouldn't be too hard a search.
 
 Alternatively, if you've got the fancy new PHP 5.4, you should be able to just run the script with the new internal HTTP server by doing this:
 
