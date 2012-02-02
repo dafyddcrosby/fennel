@@ -28,7 +28,7 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the Fennel project.
 */
 
-$VERSION='0.1';
+$VERSION='0.2.0';
 
 // Get this file's name
 $FILE_NAME = basename($_SERVER["PHP_SELF"]);
@@ -43,9 +43,13 @@ $CONFIG_FILE = $FILE_BASE.'.config.php';
 if (!file_exists($CONFIG_FILE)) {
     $config_file_contents = <<<EOF
 <?php
+// File locations
 \$CONFIG['db'] = '{$FILE_BASE}.db';
-\$CONFIG['title'] = 'Fennel';
 \$CONFIG['css'] = '{$FILE_NAME}?css';
+
+// Human-friendly configuration
+\$CONFIG['title'] = 'Fennel';
+\$CONFIG['description'] = 'Fennel wiki';
 ?>
 EOF;
     $fp = fopen($CONFIG_FILE, 'w');
@@ -92,14 +96,6 @@ if ($PHP_VERSION < 5) {
     $DB = new DB3();
 }
 
-// Output a CSS file
-if (isset($_GET['rss'])) {
-    //TODO
-    header('Content-Type: application/rss+xml; charset=ISO-8859-1');
-    $RSS = '';
-    die($RSS);
-}
-
 // See if 'articles' table exists
 // [Before everyone complains, I do it this way since
 // CREATE IF NOT EXISTS only came about in SQLite 3.3.0]
@@ -115,7 +111,39 @@ if (!$chk['name']) {
     $DB->query($sql);
 }
 
-
+// Output a RSS file
+if (isset($_GET['rss'])) {
+    //TODO Add pubDate tags
+    //TODO Figure out how to clean up formatting
+    // Spec can be found at http://cyber.law.harvard.edu/rss/rss.html
+    header('Content-Type: application/rss+xml; charset=ISO-8859-1');
+    $sql = 'SELECT title, article, last_modified FROM articles ORDER BY last_modified DESC LIMIT 10';
+    $q = $DB->query($sql);
+    $result = $q->fetchAll();
+    $RSS = <<<RSS
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+    <title>{$CONFIG['title']}</title>
+    <description>{$CONFIG['description']}</description>
+    <link>{$_SERVER['PHP_SELF']}</link>
+RSS;
+    foreach($result as $tlink) {
+        $url = $_SERVER['PHP_SELF'].'?page='.urlencode(trim($tlink['title']));
+        $RSS .= <<<RSS
+        <item>
+            <title>{$tlink['title']}</title>
+            <description>{$tlink['article']}</description>
+            <link>$url</link>
+        </item>
+RSS;
+    }
+    $RSS .= <<<RSS
+</channel>
+</rss>
+RSS;
+    die($RSS);
+}
 
 // This is the sausage-factory part of the code
 // It takes the article, and converts the markup to HTML
@@ -228,7 +256,7 @@ function format_article ($str, $file_name) {
                     if ($line[$i+1] == '[') {
                         $link = '';
                         for ($k = $i + 2; $k <= strlen($line); $k++) {
-                            //TODO - Iterate through until you find the ]]
+                            // Iterate through until you find the ]]
                             // and if you don't find it, output as normal
                             if ($line[$k] == ']' && $line[$k + 1] == ']') {
                                 // Create the link
@@ -366,7 +394,7 @@ EDIT;
         case 'about':
             $PAGE_STUFF = <<<ABOUT
 Fennel, written by Dafydd Crosby, 2012<br>
-Set up your own wiki quickly by visiting the Fennel website
+Find out how to set up your own wiki quickly by visiting the <a href="http://github.com/dafyddcrosby/fennel">Fennel website</a>
 ABOUT;
             break;
         case 'all_pages':
