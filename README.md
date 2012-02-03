@@ -55,4 +55,12 @@ In order to keep Fennel simple, there's no plan on adding plugins. If you want s
 TODO
 ====
 * Finish the markup function
+** Block quotes
+** Lists
+** Tables
+** Horizontal rules
+** Images
 * Make the CSS pretty
+* Complete the RSS functionality
+* Alter article table for auto-generated created_on date
+* Users...
